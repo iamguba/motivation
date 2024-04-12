@@ -18,19 +18,6 @@ function updateTimer() {
   if (seconds > 0) displayText += `${seconds} seconds`;
 
   document.getElementById('timer').textContent = displayText;
-  adjustFontSize();
-}
-
-function adjustFontSize() {
-  const timerElement = document.getElementById('timer');
-  let fontSize = 100; // Start with a large font size
-  timerElement.style.fontSize = `${fontSize}px`;
-
-  // Decrease the font size until the text fits without scrolling
-  while (timerElement.scrollWidth > document.body.clientWidth) {
-    fontSize--;
-    timerElement.style.fontSize = `${fontSize}px`;
-  }
 }
 
 setInterval(updateTimer, 1000);
