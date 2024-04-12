@@ -8,9 +8,9 @@ body, html {
   font-family: Arial, sans-serif;
 }
 
-h1 {
+#timer {
   padding: 0 20px;
-  font-size: 5vw; /* Adjust based on your specific needs */
+  font-size: 4vw; /* Adjust based on your specific needs */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
