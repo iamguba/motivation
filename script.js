@@ -1,24 +1,45 @@
-const startTs = new Date('April 10, 2024 12:00:00').getTime(); // Hardcoded start timestamp
+const startTs = new Date("April 10, 2024 12:00:00").getTime(); // Hardcoded start timestamp
+const goal = 30 * 24 * 60 * 60; // Goal in seconds, assuming one month
 
 function updateTimer() {
   const now = new Date().getTime();
   const diff = now - startTs;
-  
-  const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30)); // Assuming 30 days per month
-  const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-  let displayText = '';
+  const totalSeconds = Math.floor(diff / 1000);
+  const months = Math.floor(totalSeconds / (30 * 24 * 60 * 60));
+  const days = Math.floor(
+    (totalSeconds % (30 * 24 * 60 * 60)) / (24 * 60 * 60)
+  );
+  const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+  const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+  const seconds = totalSeconds % 60;
+
+  let displayText = "";
   if (months > 0) displayText += `${months} months `;
   if (days > 0) displayText += `${days} days `;
   if (hours > 0) displayText += `${hours} hours `;
   if (minutes > 0) displayText += `${minutes} minutes `;
   if (seconds > 0) displayText += `${seconds} seconds`;
 
-  document.getElementById('timer').textContent = displayText;
+  document.getElementById("timer").textContent = displayText;
+  updateProgressBar(totalSeconds, goal);
+}
+
+function updateProgressBar(currentSeconds, goalSeconds) {
+  const progressPercentage = Math.min(
+    (currentSeconds / goalSeconds) * 100,
+    100
+  );
+  const progressBar = document.getElementById("progress-bar");
+  const percentageText = document.getElementById("progress-percentage");
+
+  progressBar.style.width = `${progressPercentage}%`;
+  percentageText.textContent = `${progressPercentage.toFixed(0)}%`;
+
+  // Color interpolation from red to green using HSL
+  const hue = progressPercentage * 1.2; // 0 (red) to 120 (green)
+  progressBar.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
 }
 
 setInterval(updateTimer, 1000);
-window.onload = updateTimer; // Adjust the font size immediately on load
+window.onload = updateTimer; // Ensure everything is properly initialized
