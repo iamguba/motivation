@@ -10,7 +10,7 @@ body, html {
 
 h1 {
   padding: 0 20px;
-  font-size: 10vw; /* Adjust based on your specific needs */
+  font-size: 5vw; /* Adjust based on your specific needs */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
