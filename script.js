@@ -1,4 +1,4 @@
-const startTs = new Date("April 10, 2024 12:00:00").getTime(); // Hardcoded start timestamp
+const startTs = new Date("Mon Apr 15 2024 10:05:32 GMT+0300").getTime(); // Hardcoded start timestamp
 const goal = 30 * 24 * 60 * 60; // Goal in seconds, assuming one month
 
 function updateTimer() {
