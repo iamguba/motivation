@@ -1,5 +1,10 @@
+const T_MINUTES = 60;
+const T_HOURS = 60 * T_MINUTES;
+const T_DAYS = 24 * T_HOURS;
+const T_MONTHS = 30 * T_DAYS;
+
 const startTs = new Date("Mon Apr 15 2024 10:05:32 GMT+0300").getTime(); // Hardcoded start timestamp
-const goal = 60 * 24 * 60 * 60; // Goal in seconds, assuming one month
+const goal = 4 * T_MONTHS;
 
 function updateTimer() {
   const now = new Date().getTime();
