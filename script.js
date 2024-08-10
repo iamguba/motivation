@@ -1,50 +1,74 @@
+const GOALS = ["weed", "alco"];
+
 const T_MINUTES = 60;
 const T_HOURS = 60 * T_MINUTES;
 const T_DAYS = 24 * T_HOURS;
 const T_MONTHS = 30 * T_DAYS;
 
-const startTs = new Date("Mon Apr 15 2024 10:05:32 GMT+0300").getTime(); // Hardcoded start timestamp
-const goal = 4 * T_MONTHS;
+function update() {
+  GOALS.forEach((goal) => {
+    const { el, goalMonths, goalSeconds, totalSeconds, startDate } =
+      getGoalSectionWithData(goal);
 
-function updateTimer() {
-  const now = new Date().getTime();
-  const diff = now - startTs;
+    const displayText = getTextForProgress(totalSeconds);
+    const percents = getPercentsWithForProgress(totalSeconds, goalSeconds);
 
-  const totalSeconds = Math.floor(diff / 1000);
-  const months = Math.floor(totalSeconds / (30 * 24 * 60 * 60));
-  const days = Math.floor(
-    (totalSeconds % (30 * 24 * 60 * 60)) / (24 * 60 * 60)
+    updateGoalSectionWithData(el, {
+      startDate,
+      displayText,
+      goalMonths,
+      percents,
+    });
+  });
+}
+
+function getGoalSectionWithData(id) {
+  const el = document.getElementById(id);
+  const goalMonths = Number(el.dataset.goalMonths);
+  const goalSeconds = goalMonths * T_MONTHS;
+
+  const startDate = new Date(el.dataset.startDate);
+  const totalSeconds = Math.floor(
+    (new Date().getTime() - startDate.getTime()) / 1000,
   );
-  const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
-  const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
-  const seconds = totalSeconds % 60;
+
+  return { el, goalMonths, goalSeconds, totalSeconds, startDate };
+}
+
+function updateGoalSectionWithData(
+  el,
+  { startDate, displayText, goalMonths, percents },
+) {
+  const date = startDate.toISOString().slice(0, "YYYY-MM-DD".length);
+  el.querySelector(".start-date").textContent = `starts at ${date}`;
+  el.querySelector(".time-progress").textContent = displayText;
+  el.querySelector(".goal").textContent = `goal: ${goalMonths} months`;
+  el.querySelector(".percent-progress").textContent = `${percents}%`;
+
+  const progressBar = el.querySelector("progress");
+  progressBar.value = percents;
+}
+
+function getTextForProgress(totalSeconds) {
+  const months = Math.floor(totalSeconds / T_MONTHS);
+  const days = Math.floor((totalSeconds % T_MONTHS) / T_DAYS);
+  const hours = Math.floor((totalSeconds % T_DAYS) / T_HOURS);
+  const minutes = Math.floor((totalSeconds % T_HOURS) / T_MINUTES);
+  const seconds = totalSeconds % T_MINUTES;
 
   let displayText = "";
-  if (months > 0) displayText += `${months} months `;
-  if (days > 0) displayText += `${days} days `;
-  if (hours > 0) displayText += `${hours} hours `;
-  if (minutes > 0) displayText += `${minutes} minutes `;
-  if (seconds > 0) displayText += `${seconds} seconds`;
+  if (months > 0) displayText += `${months}M `;
+  if (days > 0) displayText += `${days}D `;
+  if (hours > 0) displayText += `${hours}h `;
+  if (minutes > 0) displayText += `${minutes}m `;
+  if (seconds > 0) displayText += `${seconds}s`;
 
-  document.getElementById("timer").textContent = displayText;
-  updateProgressBar(totalSeconds, goal);
+  return displayText;
 }
 
-function updateProgressBar(currentSeconds, goalSeconds) {
-  const progressPercentage = Math.min(
-    (currentSeconds / goalSeconds) * 100,
-    100
-  );
-  const progressBar = document.getElementById("progress-bar");
-  const percentageText = document.getElementById("progress-percentage");
-
-  progressBar.style.width = `${progressPercentage}%`;
-  percentageText.textContent = `${progressPercentage.toFixed(0)}%`;
-
-  // Color interpolation from red to green using HSL
-  const hue = progressPercentage * 1.2; // 0 (red) to 120 (green)
-  progressBar.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+function getPercentsWithForProgress(totalSeconds, goalSeconds) {
+  return Math.floor(Math.min((totalSeconds / goalSeconds) * 100, 100));
 }
 
-setInterval(updateTimer, 1000);
-window.onload = updateTimer; // Ensure everything is properly initialized
+setInterval(update, 1000);
+window.onload = update;
