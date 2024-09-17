@@ -1,4 +1,4 @@
-const GOALS = ["weed", "alco"];
+const GOALS = ["weed", "alco", "hookah"];
 
 const T_MINUTES = 60;
 const T_HOURS = 60 * T_MINUTES;
