@@ -1,5 +1,5 @@
 // const GOALS = ["weed", "alco", "hookah"];
-const GOALS = ["alco"];
+const GOALS = ["weed"];
 
 const T_MINUTES = 60;
 const T_HOURS = 60 * T_MINUTES;
@@ -30,7 +30,7 @@ function getGoalSectionWithData(id) {
 
   const startDate = new Date(el.dataset.startDate);
   const totalSeconds = Math.floor(
-    (new Date().getTime() - startDate.getTime()) / 1000
+    (new Date().getTime() - startDate.getTime()) / 1000,
   );
 
   return { el, goalMonths, goalSeconds, totalSeconds, startDate };
@@ -38,7 +38,7 @@ function getGoalSectionWithData(id) {
 
 function updateGoalSectionWithData(
   el,
-  { startDate, displayText, goalMonths, percents }
+  { startDate, displayText, goalMonths, percents },
 ) {
   const date = startDate.toISOString().slice(0, "YYYY-MM-DD".length);
   el.querySelector(".start-date").textContent = `starts at ${date}`;
